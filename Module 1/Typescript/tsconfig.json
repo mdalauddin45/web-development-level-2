@@ -5,6 +5,8 @@
     "lib": ["dom", "es6"], // Add "dom" and "es6" here to fix the console error
     "esModuleInterop": true,
     "strict": true,
+    // "rootDir": "./src",
+    // "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   }
