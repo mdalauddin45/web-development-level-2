@@ -1,4 +1,4 @@
-//Learnig Functions
+{//Learnig Functions
 
 //Normal funtion
 
@@ -25,3 +25,4 @@ const poorUser = {
 
 const arr: number[] = [10, 23, 54, 90];
 const newArray: number[] = arr.map((elem: number): number => elem * elem);
+}
