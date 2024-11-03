@@ -1,19 +1,6 @@
-{
-  //OOP Inheritance --> parent class to child class
-  class Student {
-    name: string;
-    age: number;
-    address: string;
+ const instance2 = new Counter();
+//   console.log(instance2.increment())//4->different memory
+//   console.log(instance2.increment())//5->different memory
 
-    constructor(name: string, age: number, address: string) {
-      this.name = name;
-      this.age = age;
-      this.address = address;
-    }
-    getSleep(numberOfHours: number) {
-      console.log(`${this.name} will sleep for  ${numberOfHours}`);
-    }
-  }
-  const student1 = new Student("ALAUDDIN", 23, "oganda");
-  student1.getSleep(23);
-}
+//   const instance3 = new Counter();
+//   console.log(instance3.increment()) //6
