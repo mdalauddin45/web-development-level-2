@@ -1,4 +1,5 @@
-//basic data types
+{
+    //basic data types
 
 const age: number = 25;
 const myName: string = "Alauddin";
@@ -36,3 +37,5 @@ const person: PersonType = {
   company: "BGCTUB",
 };
 
+
+}
