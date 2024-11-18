@@ -15,4 +15,3 @@ async function main() {
 }
 
 main();
-// "start:dev": "nodemon ./dist/server.js",
