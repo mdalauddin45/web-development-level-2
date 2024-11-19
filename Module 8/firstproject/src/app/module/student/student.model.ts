@@ -10,15 +10,15 @@ import validator from 'validator';
 const userNameSchema = new Schema<UserName>({
   firstName: {
     type: String,
-    required: [true,'First name is required'],
+    required: [true, 'First name is required'],
     maxlength: [20, 'max length is 20 characters'],
     trim: true,
-    validate:{
-      validator:function(value:string){
-        const firstNamestr=value.charAt(0).toUpperCase()+value.slice(1);
-        return firstNamestr==value;
+    validate: {
+      validator: function (value: string) {
+        const firstNamestr = value.charAt(0).toUpperCase() + value.slice(1);
+        return firstNamestr == value;
       },
-      message:`{VALUE} is no is capitalized`,
+      message: `{VALUE} is no is capitalized`,
     },
   },
   middleName: {
@@ -26,11 +26,11 @@ const userNameSchema = new Schema<UserName>({
   },
   lastName: {
     type: String,
-    required: [true,'Last name is required'],
-    validate:{
-      validator: (value:string)=>validator.isAlpha(value),
-      message:`{VALUE} is not a valid`,
-    }
+    required: [true, 'Last name is required'],
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: `{VALUE} is not a valid`,
+    },
   },
 });
 
@@ -81,7 +81,7 @@ const localGuradianSchema = new Schema<LocalGuardian>({
 });
 
 const studentSchema = new Schema<Student>({
-  id: { type: String, required: true ,unique: true },
+  id: { type: String, required: true, unique: true },
   name: {
     type: userNameSchema,
     required: true,
@@ -90,18 +90,19 @@ const studentSchema = new Schema<Student>({
     type: String,
     enum: {
       values: ['male', 'female'],
-      message:"The gender field only can be one of the following:male or female",
+      message:
+        'The gender field only can be one of the following:male or female',
     },
-    required: true,
+    // required: true,
   },
   dateOfBirth: { type: String },
-  email: { 
-    type: String, 
+  email: {
+    type: String,
     required: true,
-    validate:{
-      validator: (value:string)=>validator.isEmail(value),
-      message:`{VALUE} is not a valid`,
-    }
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: `{VALUE} is not a valid`,
+    },
   },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
