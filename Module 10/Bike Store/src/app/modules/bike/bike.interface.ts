@@ -1,5 +1,3 @@
-import { Model } from "mongoose";
-
 export type IBike = {
   name: string;
   brand: string;

@@ -3,11 +3,9 @@ import { BikeControllers } from './bike.controller';
 const router = express.Router();
 
 router.post('/create-bike', BikeControllers.createBike);
+router.get('/', BikeControllers.getAllBikes);
+router.get('/:id', BikeControllers.getSingleBike);
+router.delete('/:id', BikeControllers.deleteBike);
 
-// router.get('/:studentId', BikeControllers.getSingle);
-
-// router.delete('/:studentId', BikeControllers.deleteStudent);
-
-// router.get('/', BikeControllers.getAllStudents);
 
 export const bikeRoutes = router;
