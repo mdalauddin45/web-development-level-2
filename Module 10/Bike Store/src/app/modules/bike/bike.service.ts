@@ -1,34 +1,33 @@
-import Bike from './bike.model';
-import { IBike } from './bike.interface';
+import { IBike } from "./bike.interface";
+import { Bike } from "./bike.model";
 
-export const createBike = async (data: IBike): Promise<IBike> => {
-  const bike = new Bike(data);
-  return await bike.save();
+const createBikeIntoDB = async (bikeData: IBike) => {
+  const result = await Bike.create(bikeData);
+  return result;
 };
-
-export const getAllBikes = async (searchTerm?: string): Promise<IBike[]> => {
-  const query = searchTerm
-    ? {
-        $or: [
-          { name: { $regex: searchTerm, $options: 'i' } },
-          { brand: { $regex: searchTerm, $options: 'i' } },
-          { category: { $regex: searchTerm, $options: 'i' } },
-        ],
-      }
-    : {};
-  return await Bike.find(query);
+const getAllBikeFromDB = async () => {
+  const result = await Bike.find();
+  return result;
 };
-
-export const getBikeById = async (id: string): Promise<IBike | null> => {
-  return await Bike.findById(id);
+const getSingleBikeFromDB = async (id: string) => {
+  const result = await Bike.findById(id);
+  return result;
 };
-
-export const updateBike = async (id: string, data: Partial<IBike>): Promise<IBike | null> => {
-  const bike = await Bike.findByIdAndUpdate(id, data, { new: true });
-  return bike;
+const updateBikeInDB = async (id: string, updatedData: Partial<IBike>) => {
+  const result = await Bike.findByIdAndUpdate(id, updatedData, {
+    new: true,
+    runValidators: true,
+  });
+  return result;
 };
-
-export const deleteBike = async (id: string): Promise<void> => {
-  await Bike.findByIdAndDelete(id);
+const deleteBikeFromDB = async (id: string) => {
+  const result = await Bike.updateOne({ _id: id }, { isDeleted: true });
+  return result;
 };
-
+export const BikeServices = {
+  createBikeIntoDB,
+  getAllBikeFromDB,
+  getSingleBikeFromDB,
+  deleteBikeFromDB,
+  updateBikeInDB,
+};

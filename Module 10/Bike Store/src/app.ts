@@ -10,9 +10,9 @@ app.use(express.json());
 app.use(cors());
 
 // Application routes
-app.use('/api/v1/products', bikeRoutes);
+app.use('/api/v1/bikes', bikeRoutes);
 app.get('/', (req: Request, res: Response) => {
-  res.send("Hello World");
+  res.send("Nice World");
 });
 
 export default app;

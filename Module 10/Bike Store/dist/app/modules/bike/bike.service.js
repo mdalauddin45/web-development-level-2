@@ -8,40 +8,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteBike = exports.updateBike = exports.getBikeById = exports.getAllBikes = exports.createBike = void 0;
-const bike_model_1 = __importDefault(require("./bike.model"));
-const createBike = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const bike = new bike_model_1.default(data);
-    return yield bike.save();
+exports.BikeServices = void 0;
+const bike_model_1 = require("./bike.model");
+const createBikeIntoDB = (bikeData) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield bike_model_1.Bike.create(bikeData);
+    return result;
 });
-exports.createBike = createBike;
-const getAllBikes = (searchTerm) => __awaiter(void 0, void 0, void 0, function* () {
-    const query = searchTerm
-        ? {
-            $or: [
-                { name: { $regex: searchTerm, $options: 'i' } },
-                { brand: { $regex: searchTerm, $options: 'i' } },
-                { category: { $regex: searchTerm, $options: 'i' } },
-            ],
-        }
-        : {};
-    return yield bike_model_1.default.find(query);
+const getAllBikeFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield bike_model_1.Bike.find();
+    return result;
 });
-exports.getAllBikes = getAllBikes;
-const getBikeById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield bike_model_1.default.findById(id);
+const getSingleBikeFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield bike_model_1.Bike.findById(id);
+    return result;
 });
-exports.getBikeById = getBikeById;
-const updateBike = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    const bike = yield bike_model_1.default.findByIdAndUpdate(id, data, { new: true });
-    return bike;
+const updateBikeInDB = (id, updatedData) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield bike_model_1.Bike.findByIdAndUpdate(id, updatedData, {
+        new: true,
+        runValidators: true,
+    });
+    return result;
 });
-exports.updateBike = updateBike;
-const deleteBike = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    yield bike_model_1.default.findByIdAndDelete(id);
+const deleteBikeFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield bike_model_1.Bike.updateOne({ _id: id }, { isDeleted: true });
+    return result;
 });
-exports.deleteBike = deleteBike;
+exports.BikeServices = {
+    createBikeIntoDB,
+    getAllBikeFromDB,
+    getSingleBikeFromDB,
+    deleteBikeFromDB,
+    updateBikeInDB,
+};
