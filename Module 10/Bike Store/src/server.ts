@@ -11,8 +11,9 @@ async function main() {
       console.log(`app is listening on port ${config.port}`);
     });
   } catch (err) {
-    console.log(err);
+    console.error('Database connection failed:', err);
+    process.exit(1);
   }
 }
-
 main();
+export default app;

@@ -24,8 +24,10 @@ function main() {
             });
         }
         catch (err) {
-            console.log(err);
+            console.error('Database connection failed:', err);
+            process.exit(1);
         }
     });
 }
 main();
+exports.default = app_1.default;
