@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { BikeServices } from "./bike.service";
+import { IBike, IOrder } from "./bike.interface";
+import { bikeValidation } from "./bike.validation";
 
 const createBike = async (req: Request, res: Response) => {
   try {
     const { bike: bikeData } = req.body;
 
-    const result = await BikeServices.createBikeIntoDB(bikeData);
+    const zodParsedData = bikeValidation.bikeValidationSchema.parse(bikeData);
+    const result = await BikeServices.createBikeIntoDB(zodParsedData);
 
     res.status(200).json({
       success: true,
@@ -43,22 +46,41 @@ const getAllBikes = async (req: Request, res: Response) => {
   }
 };
 
-
 const getSingleBike = async (req: Request, res: Response) => {
   try {
-    const  bikeId  = req.params.id;
+    const bikeId = req.params.id;
     console.log(bikeId);
     const result = await BikeServices.getSingleBikeFromDB(bikeId);
 
     res.status(200).json({
       success: true,
-      message: 'Bike is retrieved succesfully',
+      message: "Bike is retrieved succesfully",
       data: result,
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || 'something went wrong',
+      message: err.message || "something went wrong",
+      error: err,
+    });
+  }
+};
+const updateBike = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const updateData = req.body;
+    console.log(updateData, id);
+    const updatedBike = await BikeServices.updateBikeInDB(id, updateData);
+    console.log(updatedBike);
+    res.status(200).json({
+      success: true,
+      message: "Bike updated successfully",
+      data: updatedBike,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
       error: err,
     });
   }
@@ -66,18 +88,71 @@ const getSingleBike = async (req: Request, res: Response) => {
 
 const deleteBike = async (req: Request, res: Response) => {
   try {
-    const  id  = req.params.id;
+    const id = req.params.id;
     const result = await BikeServices.deleteBikeFromDB(id);
-    
+
     res.status(200).json({
       success: true,
-      message: 'Bike deleted succesfully',
+      message: "Bike deleted succesfully",
       data: {},
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || 'something went wrong',
+      message: err.message || "something went wrong",
+      error: err,
+    });
+  }
+};
+const placeOrder = async (req: Request<{}, {}, IOrder>, res: Response) => {
+  try {
+    const { email, product, quantity, totalPrice } = req.body;
+
+    const validatedData = bikeValidation.createOrderSchema.parse({
+      email,
+      product,
+      quantity,
+      totalPrice,
+    });
+
+    const order = await BikeServices.placeOrder(
+      validatedData.email,
+      validatedData.product,
+      validatedData.quantity,
+      validatedData.totalPrice
+    );
+
+    // const zodParsedData = bikeValidation.createOrderSchema.parse({ email, product, quantity, totalPrice } );
+    // const order = await BikeServices.placeOrder(email, product, quantity, totalPrice);
+
+    res.status(200).json({
+      success: true,
+      message: "Order created successfully",
+      data: order,
+    });
+  } catch (err: any) {
+    res.status(400).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+};
+const getRevenue = async (req: Request, res: Response) => {
+  try {
+    const totalRevenue = await BikeServices.calculateTotalRevenue();
+
+    res.status(200).json({
+      success: true,
+      message: "Revenue calculated successfully",
+      data: {
+        totalRevenue,
+      },
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
       error: err,
     });
   }
@@ -88,4 +163,7 @@ export const BikeControllers = {
   getAllBikes,
   getSingleBike,
   deleteBike,
+  updateBike,
+  placeOrder,
+  getRevenue,
 };

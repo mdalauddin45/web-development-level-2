@@ -11,10 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BikeControllers = void 0;
 const bike_service_1 = require("./bike.service");
+const bike_validation_1 = require("./bike.validation");
 const createBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { bike: bikeData } = req.body;
-        const result = yield bike_service_1.BikeServices.createBikeIntoDB(bikeData);
+        const zodParsedData = bike_validation_1.bikeValidation.bikeValidationSchema.parse(bikeData);
+        const result = yield bike_service_1.BikeServices.createBikeIntoDB(zodParsedData);
         res.status(200).json({
             success: true,
             message: "Bike is created successfully",
@@ -29,6 +31,139 @@ const createBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+const getAllBikes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { searchTerm } = req.query;
+        let result;
+        if (searchTerm) {
+            result = yield bike_service_1.BikeServices.getBikesBySearchTerm(searchTerm);
+        }
+        else {
+            result = yield bike_service_1.BikeServices.getAllBikeFromDB();
+        }
+        res.status(200).json({
+            success: true,
+            message: "Bikes retrieved successfully",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
+    }
+});
+const getSingleBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const bikeId = req.params.id;
+        console.log(bikeId);
+        const result = yield bike_service_1.BikeServices.getSingleBikeFromDB(bikeId);
+        res.status(200).json({
+            success: true,
+            message: "Bike is retrieved succesfully",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "something went wrong",
+            error: err,
+        });
+    }
+});
+const updateBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        const updateData = req.body;
+        console.log(updateData, id);
+        const updatedBike = yield bike_service_1.BikeServices.updateBikeInDB(id, updateData);
+        console.log(updatedBike);
+        res.status(200).json({
+            success: true,
+            message: "Bike updated successfully",
+            data: updatedBike,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
+    }
+});
+const deleteBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        const result = yield bike_service_1.BikeServices.deleteBikeFromDB(id);
+        res.status(200).json({
+            success: true,
+            message: "Bike deleted succesfully",
+            data: {},
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "something went wrong",
+            error: err,
+        });
+    }
+});
+const placeOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, product, quantity, totalPrice } = req.body;
+        const validatedData = bike_validation_1.bikeValidation.createOrderSchema.parse({
+            email,
+            product,
+            quantity,
+            totalPrice,
+        });
+        const order = yield bike_service_1.BikeServices.placeOrder(validatedData.email, validatedData.product, validatedData.quantity, validatedData.totalPrice);
+        // const zodParsedData = bikeValidation.createOrderSchema.parse({ email, product, quantity, totalPrice } );
+        // const order = await BikeServices.placeOrder(email, product, quantity, totalPrice);
+        res.status(200).json({
+            success: true,
+            message: "Order created successfully",
+            data: order,
+        });
+    }
+    catch (err) {
+        res.status(400).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
+    }
+});
+const getRevenue = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const totalRevenue = yield bike_service_1.BikeServices.calculateTotalRevenue();
+        res.status(200).json({
+            success: true,
+            message: "Revenue calculated successfully",
+            data: {
+                totalRevenue,
+            },
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
+    }
+});
 exports.BikeControllers = {
     createBike,
+    getAllBikes,
+    getSingleBike,
+    deleteBike,
+    updateBike,
+    placeOrder,
+    getRevenue,
 };

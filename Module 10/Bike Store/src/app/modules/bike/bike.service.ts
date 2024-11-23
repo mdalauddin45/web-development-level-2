@@ -1,7 +1,7 @@
-import { IBike } from "./bike.interface";
-import { Bike } from "./bike.model";
+import { IBike, IOrder } from "./bike.interface";
+import { Bike, Order } from "./bike.model";
 import mongoose from "mongoose";
-
+import { Types } from 'mongoose';
 
 const createBikeIntoDB = async (bikeData: IBike) => {
   const result = await Bike.create(bikeData);
@@ -22,21 +22,63 @@ const getBikesBySearchTerm = async (searchTerm: string) => {
   });
 };
 const getSingleBikeFromDB = async (id: string) => {
-    const result = await Bike.findById(id);
-    return result;
+  const result = await Bike.findById(id);
+  return result;
 };
 
 const deleteBikeFromDB = async (id: string) => {
   const result = await Bike.findByIdAndDelete(id);
   return result;
 };
-const updateBikeInDB = async (id: string, updatedData: Partial<IBike>) => {
-  const result = await Bike.findByIdAndUpdate(id, updatedData, {
+const updateBikeInDB = async (id: string, updateData: Partial<IBike>) => {
+  return await Bike.findByIdAndUpdate(id, updateData, {
     new: true,
     runValidators: true,
   });
-  return result;
 };
+
+const placeOrder = async (
+  email: string,
+  product: string,
+  quantity: number,
+  totalPrice: number
+) => {
+  const productObjectId = new Types.ObjectId(product);
+  const bike = await Bike.findById(product);
+  if (!bike) {
+    throw new Error("Bike not found");
+  }
+
+  if (bike.quantity < quantity) {
+    throw new Error("Insufficient stock");
+  }
+  bike.quantity -= quantity;
+  if (bike.quantity === 0) {
+    bike.inStock = false;
+  }
+  await bike.save();
+  const order = new Order({
+    email,
+    product: productObjectId,
+    quantity,
+    totalPrice,
+  });
+  await order.save();
+  return order;
+};
+const calculateTotalRevenue = async () => {
+  const revenue = await Order.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalRevenue: { $sum: '$totalPrice' }, 
+      },
+    },
+  ]);
+
+  return revenue[0]?.totalRevenue || 0; 
+};
+
 export const BikeServices = {
   createBikeIntoDB,
   getAllBikeFromDB,
@@ -44,4 +86,6 @@ export const BikeServices = {
   getSingleBikeFromDB,
   deleteBikeFromDB,
   updateBikeInDB,
+  placeOrder,
+  calculateTotalRevenue,
 };
