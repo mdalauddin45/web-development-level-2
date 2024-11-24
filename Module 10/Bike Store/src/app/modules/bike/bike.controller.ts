@@ -49,7 +49,6 @@ const getAllBikes = async (req: Request, res: Response) => {
 const getSingleBike = async (req: Request, res: Response) => {
   try {
     const bikeId = req.params.id;
-    console.log(bikeId);
     const result = await BikeServices.getSingleBikeFromDB(bikeId);
 
     res.status(200).json({
@@ -69,9 +68,7 @@ const updateBike = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const updateData = req.body;
-    console.log(updateData, id);
     const updatedBike = await BikeServices.updateBikeInDB(id, updateData);
-    console.log(updatedBike);
     res.status(200).json({
       success: true,
       message: "Bike updated successfully",

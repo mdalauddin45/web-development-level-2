@@ -1,5 +1,3 @@
-import { ObjectId } from 'mongoose';
-
 export type IBike = {
   name: string;
   brand: string;
@@ -12,7 +10,7 @@ export type IBike = {
   updatedAt?: string;
 };
 
-export interface IOrder {
+export type IOrder ={
   email: string;
   product: string;  
   quantity: number;
