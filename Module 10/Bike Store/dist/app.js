@@ -13,6 +13,6 @@ app.use((0, cors_1.default)());
 // Application routes
 app.use('/api/v1/bikes', bike_route_1.bikeRoutes);
 app.get('/', (req, res) => {
-    res.send("welcome to our Bike store!");
+    res.send("nice world");
 });
 exports.default = app;

@@ -58,7 +58,6 @@ const getAllBikes = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const getSingleBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bikeId = req.params.id;
-        console.log(bikeId);
         const result = yield bike_service_1.BikeServices.getSingleBikeFromDB(bikeId);
         res.status(200).json({
             success: true,
@@ -78,9 +77,7 @@ const updateBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const id = req.params.id;
         const updateData = req.body;
-        console.log(updateData, id);
         const updatedBike = yield bike_service_1.BikeServices.updateBikeInDB(id, updateData);
-        console.log(updatedBike);
         res.status(200).json({
             success: true,
             message: "Bike updated successfully",

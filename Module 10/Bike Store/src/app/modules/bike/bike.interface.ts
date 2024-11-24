@@ -10,7 +10,7 @@ export type IBike = {
   updatedAt?: string;
 };
 
-export type IOrder ={
+export interface IOrder {
   email: string;
   product: string;  
   quantity: number;
