@@ -11,8 +11,8 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 // Application routes
-app.use('/api/products', bike_route_1.bikeRoutes);
+app.use('/api', bike_route_1.bikeRoutes);
 app.get('/', (req, res) => {
-    res.send("Nice world");
+    res.send("welcome to out bike store API!");
 });
 exports.default = app;

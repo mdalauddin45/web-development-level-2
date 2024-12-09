@@ -21,7 +21,7 @@ Bike Store is a RESTful API for managing bikes and orders. It includes features 
 ## Live Demo
 
 The application is deployed on Vercel. Visit the live API:
-[https://bike-store-snowy.vercel.app/](https://bike-store-snowy.vercel.app/)
+[https://bike-store-two.vercel.app/](https://bike-store-two.vercel.app/)
 
 ## Project Repository
 

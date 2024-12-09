@@ -19,14 +19,14 @@ const createBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const result = yield bike_service_1.BikeServices.createBikeIntoDB(zodParsedData);
         res.status(200).json({
             success: true,
-            message: "Bike is created successfully",
+            message: 'Bike is created successfully',
             data: result,
         });
     }
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -43,69 +43,70 @@ const getAllBikes = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         res.status(200).json({
             success: true,
-            message: "Bikes retrieved successfully",
+            message: 'Bikes retrieved successfully',
             data: result,
         });
     }
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
 });
 const getSingleBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const bikeId = req.params.id;
+        const bikeId = req.params.productId;
         const result = yield bike_service_1.BikeServices.getSingleBikeFromDB(bikeId);
+        console.log(result);
         res.status(200).json({
             success: true,
-            message: "Bike is retrieved succesfully",
+            message: 'Bike is retrieved succesfully',
             data: result,
         });
     }
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "something went wrong",
+            message: err.message || 'something went wrong',
             error: err,
         });
     }
 });
 const updateBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.params.id;
+        const id = req.params.productId;
         const updateData = req.body;
         const updatedBike = yield bike_service_1.BikeServices.updateBikeInDB(id, updateData);
         res.status(200).json({
             success: true,
-            message: "Bike updated successfully",
+            message: 'Bike updated successfully',
             data: updatedBike,
         });
     }
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
 });
 const deleteBike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.params.id;
+        const id = req.params.productId;
         const result = yield bike_service_1.BikeServices.deleteBikeFromDB(id);
         res.status(200).json({
             success: true,
-            message: "Bike deleted succesfully",
+            message: 'Bike deleted succesfully',
             data: {},
         });
     }
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "something went wrong",
+            message: err.message || 'something went wrong',
             error: err,
         });
     }
@@ -120,18 +121,16 @@ const placeOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             totalPrice,
         });
         const order = yield bike_service_1.BikeServices.placeOrder(validatedData.email, validatedData.product, validatedData.quantity, validatedData.totalPrice);
-        // const zodParsedData = bikeValidation.createOrderSchema.parse({ email, product, quantity, totalPrice } );
-        // const order = await BikeServices.placeOrder(email, product, quantity, totalPrice);
         res.status(200).json({
             success: true,
-            message: "Order created successfully",
+            message: 'Order created successfully',
             data: order,
         });
     }
     catch (err) {
         res.status(400).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -141,7 +140,7 @@ const getRevenue = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const totalRevenue = yield bike_service_1.BikeServices.calculateTotalRevenue();
         res.status(200).json({
             success: true,
-            message: "Revenue calculated successfully",
+            message: 'Revenue calculated successfully',
             data: {
                 totalRevenue,
             },
@@ -150,7 +149,7 @@ const getRevenue = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
