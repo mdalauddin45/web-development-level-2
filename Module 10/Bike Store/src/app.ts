@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // Application routes
-app.use('/api/v1/bikes', bikeRoutes);
+app.use('/api', bikeRoutes);
 app.get('/', (req: Request, res: Response) => {
   res.send("Nice world");
 });

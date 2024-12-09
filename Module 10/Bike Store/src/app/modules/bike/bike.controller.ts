@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { BikeServices } from "./bike.service";
-import { IBike, IOrder } from "./bike.interface";
-import { bikeValidation } from "./bike.validation";
+import { Request, Response } from 'express';
+import { BikeServices } from './bike.service';
+import { IBike, IOrder } from './bike.interface';
+import { bikeValidation } from './bike.validation';
 
 const createBike = async (req: Request, res: Response) => {
   try {
@@ -12,13 +12,13 @@ const createBike = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: "Bike is created successfully",
+      message: 'Bike is created successfully',
       data: result,
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
+      message: err.message || 'Something went wrong',
       error: err,
     });
   }
@@ -34,13 +34,13 @@ const getAllBikes = async (req: Request, res: Response) => {
     }
     res.status(200).json({
       success: true,
-      message: "Bikes retrieved successfully",
+      message: 'Bikes retrieved successfully',
       data: result,
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
+      message: err.message || 'Something went wrong',
       error: err,
     });
   }
@@ -48,36 +48,36 @@ const getAllBikes = async (req: Request, res: Response) => {
 
 const getSingleBike = async (req: Request, res: Response) => {
   try {
-    const bikeId = req.params.id;
+    const bikeId = req.params.productId;
     const result = await BikeServices.getSingleBikeFromDB(bikeId);
-
+    console.log(result);
     res.status(200).json({
       success: true,
-      message: "Bike is retrieved succesfully",
+      message: 'Bike is retrieved succesfully',
       data: result,
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || "something went wrong",
+      message: err.message || 'something went wrong',
       error: err,
     });
   }
 };
 const updateBike = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.productId;
     const updateData = req.body;
     const updatedBike = await BikeServices.updateBikeInDB(id, updateData);
     res.status(200).json({
       success: true,
-      message: "Bike updated successfully",
+      message: 'Bike updated successfully',
       data: updatedBike,
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
+      message: err.message || 'Something went wrong',
       error: err,
     });
   }
@@ -85,18 +85,18 @@ const updateBike = async (req: Request, res: Response) => {
 
 const deleteBike = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.productId;
     const result = await BikeServices.deleteBikeFromDB(id);
 
     res.status(200).json({
       success: true,
-      message: "Bike deleted succesfully",
+      message: 'Bike deleted succesfully',
       data: {},
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || "something went wrong",
+      message: err.message || 'something went wrong',
       error: err,
     });
   }
@@ -116,21 +116,18 @@ const placeOrder = async (req: Request<{}, {}, IOrder>, res: Response) => {
       validatedData.email,
       validatedData.product,
       validatedData.quantity,
-      validatedData.totalPrice
+      validatedData.totalPrice,
     );
-
-    // const zodParsedData = bikeValidation.createOrderSchema.parse({ email, product, quantity, totalPrice } );
-    // const order = await BikeServices.placeOrder(email, product, quantity, totalPrice);
 
     res.status(200).json({
       success: true,
-      message: "Order created successfully",
+      message: 'Order created successfully',
       data: order,
     });
   } catch (err: any) {
     res.status(400).json({
       success: false,
-      message: err.message || "Something went wrong",
+      message: err.message || 'Something went wrong',
       error: err,
     });
   }
@@ -141,7 +138,7 @@ const getRevenue = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: "Revenue calculated successfully",
+      message: 'Revenue calculated successfully',
       data: {
         totalRevenue,
       },
@@ -149,7 +146,7 @@ const getRevenue = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
+      message: err.message || 'Something went wrong',
       error: err,
     });
   }
