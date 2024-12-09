@@ -69,39 +69,39 @@ Follow these steps to set up the project locally.
 
 - **Create a Bike**
   ```http
-  POST /api/v1/bikes/create-bike
+  POST /api/products
   ```
 
 - **Get All Bikes**
   ```http
-  GET /api/v1/bikes
+  GET /api/products
   ```
 
 - **Get a Bike by ID**
   ```http
-  GET /api/v1/bikes/:id
+  GET /api/products/:productId
   ```
 
 - **Update a Bike**
   ```http
-  PUT /api/v1/bikes/:id
+  PUT /api/products/:productId
   ```
 
 - **Delete a Bike**
   ```http
-  DELETE /api/v1/bikes/:id
+  DELETE /api/products/:productId
   ```
 
 - **Calculate Revenue**
   ```http
-  GET /api/v1/bikes/orders/revenue
+  GET /api/orders/revenue
   ```
 
 ### Order Endpoints
 
 - **Place an Order**
   ```http
-  POST /api/v1/bikes/orders
+  POST /api/orders
   ```
 
 ## Technologies Used
