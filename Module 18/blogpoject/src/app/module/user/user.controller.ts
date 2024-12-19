@@ -1,27 +1,75 @@
 import { Request, Response } from "express";
 import { UserServices } from "./user.service";
-import { userRegistrationSchema } from "./user.validation";
+import { userLoginSchema, userRegistrationSchema } from "./user.validation";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import httpStatus from "http-status";
+import User from "./user.model";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import config from "../../config";
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = catchAsync(async (req, res) => {
   try {
     const userData = req.body;
-    const zodParsedData = userRegistrationSchema.parse(userData);
-    const result = await UserServices.createUserIntoDB(zodParsedData);
 
-    res.status(200).json({
+    const result = await UserServices.createUserIntoDB(userData);
+
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
       success: true,
       message: "User registered successfully",
       data: result,
     });
-  } catch (err: any) {
-    res.status(500).json({
+  } catch (error: unknown) {
+    const typedError = error as Error;
+    sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
       success: false,
-      message: err.message || "Something went wrong",
-      error: err,
+      message: "Validation error",
+      error: {
+        details: typedError.message || "Invalid user data",
+        stack:
+          process.env.NODE_ENV !== "production" ? typedError.stack : undefined,
+      },
     });
   }
-};
+});
+const loginUser = catchAsync(async (req, res) => {
+  try{
+    const result = await UserServices.loginUser(req.body);
+  const { refreshToken, accessToken } = result;
+
+  res.cookie('refreshToken', refreshToken, {
+    secure: config.NODE_ENV === 'production',
+    httpOnly: true,
+  });
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is logged in succesfully!',
+    data: {
+      accessToken
+    },
+  });
+  }catch (error: unknown) {
+    const typedError = error as Error;
+    sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: "Invalid credentials",
+      error: {
+        details: typedError.message || "Invalid user data",
+        stack:
+          process.env.NODE_ENV !== "production" ? typedError.stack : undefined,
+      },
+    stack: "error stack",
+    });
+  }
+});
 
 export const UserControllers = {
   createUser,
+  loginUser
 };
