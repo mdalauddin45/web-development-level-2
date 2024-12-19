@@ -1,11 +1,12 @@
-import { Model } from "mongoose";
+import { Document,Model } from "mongoose";
 
-export interface IUser{
+export interface IUser  extends Document{
     name: string;
     email: string;
     password: string;
     role?:'user'| 'admin';
     isBlocked?: boolean;
+    // isPasswordMatched(plainTextPassword: string,hashedPassword: string,): Promise<boolean>;
 }
 export type ILoginUser = {
     email:string;
