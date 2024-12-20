@@ -1,12 +1,7 @@
-import { Request, Response } from "express";
 import { UserServices } from "./user.service";
-import { userLoginSchema, userRegistrationSchema } from "./user.validation";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
-import User from "./user.model";
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import config from "../../config";
 
 const createUser = catchAsync(async (req, res) => {

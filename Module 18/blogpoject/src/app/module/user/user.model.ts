@@ -16,7 +16,6 @@ const userSchema = new Schema<IUser,UserModel>(
     password: {
       type: "string",
       required: true,
-      // select: 0,
     },
     role: {
       type: "string",
