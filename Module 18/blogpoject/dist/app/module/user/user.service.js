@@ -18,13 +18,13 @@ const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const config_1 = __importDefault(require("../../config"));
 const auth_1 = require("../../utils/auth");
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const createUserIntoDB = (userData) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.default.create(userData);
     return result;
 });
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.default.findOne({ email: payload.email });
+    console.log('Stored Hashed Password:', user);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
     }
@@ -32,12 +32,10 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (isBlocked) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'This user is isBlocked !');
     }
-    const isPasswordMatched = yield bcrypt_1.default.compare(payload.password, user.password);
-    if (!isPasswordMatched) {
-        throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, 'Invalid credentials');
-    }
-    // if (!(await User.isPasswordMatched(payload?.password, user?.password)))
-    //   throw new AppError(httpStatus.FORBIDDEN, 'Invalid credentials',);
+    console.log(payload.password);
+    console.log(user_model_1.default.isPasswordMatched);
+    if (!(yield user_model_1.default.isPasswordMatched(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password)))
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'Password do not matched');
     const jwtPayload = {
         email: user.email, password: user.password
     };

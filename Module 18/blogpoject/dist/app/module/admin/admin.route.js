@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRoutes = void 0;
+exports.adminRoutes = void 0;
 const express_1 = __importDefault(require("express"));
-const user_controller_1 = require("../user/user.controller");
+const admin_controller_1 = require("./admin.controller");
 const router = express_1.default.Router();
-router.post('/register', user_controller_1.UserControllers.createUser);
-router.post('/login', user_controller_1.UserControllers.loginUser);
-exports.userRoutes = router;
+router.patch('/users/:id/block', admin_controller_1.AdminControllers.updateUser);
+router.delete('/blogs/:id', admin_controller_1.AdminControllers.deleteBlog);
+exports.adminRoutes = router;

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const config_1 = __importDefault(require("../../config"));
 const userSchema = new mongoose_1.Schema({
     name: {
         type: "string",
@@ -27,7 +28,7 @@ const userSchema = new mongoose_1.Schema({
     password: {
         type: "string",
         required: true,
-        select: false,
+        // select: 0,
     },
     role: {
         type: "string",
@@ -41,9 +42,28 @@ const userSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
+userSchema.pre('save', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const user = this; // doc
+        // hashing password and save into DB
+        user.password = yield bcrypt_1.default.hash(user.password, Number(config_1.default.bcrypt_salt_rounds));
+        next();
+    });
+});
+// set '' after saving password
+userSchema.post('save', function (doc, next) {
+    doc.password = '';
+    next();
+});
+userSchema.statics.isUserExistsByCustomId = function (email) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield User.findOne({ email }).select('+password');
+    });
+};
 userSchema.statics.isPasswordMatched = function (plainTextPassword, hashedPassword) {
     return __awaiter(this, void 0, void 0, function* () {
-        return bcrypt_1.default.compare(plainTextPassword, hashedPassword);
+        return yield bcrypt_1.default.compare(plainTextPassword, hashedPassword);
     });
 };
 const User = (0, mongoose_1.model)('User', userSchema);

@@ -34,6 +34,8 @@ const userSchema = new Schema<IUser,UserModel>(
 );
 
 
+
+
 userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this; // doc
@@ -52,7 +54,6 @@ userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
-
 userSchema.statics.isUserExistsByCustomId = async function (email: string) {
   return await User.findOne({ email }).select('+password');
 };
@@ -64,14 +65,6 @@ userSchema.statics.isPasswordMatched = async function (
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
-userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
-  passwordChangedTimestamp: Date,
-  jwtIssuedTimestamp: number,
-) {
-  const passwordChangedTime =
-    new Date(passwordChangedTimestamp).getTime() / 1000;
-  return passwordChangedTime > jwtIssuedTimestamp;
-};
 const User = model<IUser,UserModel>('User', userSchema);
 
 export default User;
