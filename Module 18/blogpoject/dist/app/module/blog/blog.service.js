@@ -8,20 +8,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogServices = exports.createBlogIntoDB = void 0;
 const blog_model_1 = require("./blog.model");
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createBlogIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const newBlog = yield blog_model_1.Blog.create(data);
     return newBlog;
 });
 exports.createBlogIntoDB = createBlogIntoDB;
-// export const createBlogIntoDB = async (data: Partial<IBlog>) => {
-//   const result = await Blog.create(data);
-//   return result;
-// };
-const getAllBlogFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield blog_model_1.Blog.find();
+const getAllBlogFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const blogQuery = new querybuilder_1.default(blog_model_1.Blog.find(), query)
+        .search(['title', 'content'])
+        .filter()
+        .sort()
+        .paginate()
+        .select();
+    const result = yield blogQuery.modelQuery;
     return result;
 });
 const deleteBlogFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {

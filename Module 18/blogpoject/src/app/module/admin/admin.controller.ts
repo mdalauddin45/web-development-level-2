@@ -1,6 +1,6 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import httpStatus from 'http-status';
+import { StatusCodes } from "http-status-codes";
 import { AdminServices } from "./admin.service";
 import { BlogServices } from "../blog/blog.service";
 import User from "../user/user.model";
@@ -12,7 +12,7 @@ const updateUser = catchAsync(async (req, res) => {
 
       if (!user) {
         return sendResponse(res, {
-          statusCode: httpStatus.NOT_FOUND,
+          statusCode: StatusCodes.NOT_FOUND,
           success: false,
           message: "User not found",
           error: { details: "The provided user ID does not exist." },
@@ -21,14 +21,14 @@ const updateUser = catchAsync(async (req, res) => {
   
       const result = await AdminServices.updateUserInDB(id, {isBlocked: true});
       sendResponse(res, {
-        statusCode: httpStatus.CREATED,
+        statusCode: StatusCodes.CREATED,
         success: true,
         message: "User blocked successfully",
       });
     } catch (error: unknown) {
       const typedError = error as Error;
       sendResponse(res, {
-        statusCode: httpStatus.BAD_REQUEST,
+        statusCode: StatusCodes.BAD_REQUEST,
         success: false,
         message: "Validation error",
         error: {
@@ -47,7 +47,7 @@ const updateUser = catchAsync(async (req, res) => {
 
       if (!blog) {
         return sendResponse(res, {
-          statusCode: httpStatus.NOT_FOUND,
+          statusCode: StatusCodes.NOT_FOUND,
           success: false,
           message: "Blog not found",
           error: { details: "The provided blog ID does not exist." },
@@ -55,7 +55,7 @@ const updateUser = catchAsync(async (req, res) => {
       }
       const result = await BlogServices.deleteBlogFromDB(id);
       sendResponse(res, {
-        statusCode: httpStatus.CREATED,
+        statusCode: StatusCodes.CREATED,
         success: true,
         message: "Blog Delete successfully",
         data: result,
@@ -63,7 +63,7 @@ const updateUser = catchAsync(async (req, res) => {
     } catch (error: unknown) {
       const typedError = error as Error;
       sendResponse(res, {
-        statusCode: httpStatus.BAD_REQUEST,
+        statusCode: StatusCodes.BAD_REQUEST,
         success: false,
         message: "Validation error",
         error: {

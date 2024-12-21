@@ -1,6 +1,5 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import httpStatus from "http-status";
 import { BlogServices } from "./blog.service";
 import { string } from "zod";
 import User from "../user/user.model";
@@ -27,7 +26,7 @@ const createBlog = catchAsync(async (req, res) => {
     const author = user?._id.toString() as string;
     const result = await BlogServices.createBlogIntoDB({ title, content,author });
     sendResponse(res, {
-      statusCode: httpStatus.CREATED,
+      statusCode: StatusCodes.CREATED,
       success: true,
       message: "Blog created successfully",
       data: result,
@@ -35,7 +34,7 @@ const createBlog = catchAsync(async (req, res) => {
   } catch (error: unknown) {
     const typedError = error as Error;
     sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
+      statusCode: StatusCodes.BAD_REQUEST,
       success: false,
       message: "Validation error",
       error: {
@@ -49,9 +48,9 @@ const createBlog = catchAsync(async (req, res) => {
 
 const getAllBlog = catchAsync(async (req, res) => {
   try {
-    const result = await BlogServices.getAllBlogFromDB();
+    const result = await BlogServices.getAllBlogFromDB(req.query);
     sendResponse(res, {
-      statusCode: httpStatus.CREATED,
+      statusCode: StatusCodes.CREATED,
       success: true,
       message: "Blogs fetched successfully",
       data: result,
@@ -59,7 +58,7 @@ const getAllBlog = catchAsync(async (req, res) => {
   } catch (error: unknown) {
     const typedError = error as Error;
     sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
+      statusCode: StatusCodes.BAD_REQUEST,
       success: false,
       message: "Validation error",
       error: {
@@ -80,7 +79,7 @@ const updateBlog = catchAsync(async (req, res) => {
     const result = await BlogServices.updateBlogInDB(id, updateData);
 
     sendResponse(res, {
-      statusCode: httpStatus.CREATED,
+      statusCode: StatusCodes.CREATED,
       success: true,
       message: "Blog update successfully",
       data: result,
@@ -88,7 +87,7 @@ const updateBlog = catchAsync(async (req, res) => {
   } catch (error: unknown) {
     const typedError = error as Error;
     sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
+      statusCode: StatusCodes.BAD_REQUEST,
       success: false,
       message: "Validation error",
       error: {
@@ -105,7 +104,7 @@ const deleteBlog = catchAsync(async (req, res) => {
     const id = req.params.id;
     const result = await BlogServices.deleteBlogFromDB(id);
     sendResponse(res, {
-      statusCode: httpStatus.CREATED,
+      statusCode: StatusCodes.CREATED,
       success: true,
       message: "Blog created successfully",
       data: result,
@@ -113,7 +112,7 @@ const deleteBlog = catchAsync(async (req, res) => {
   } catch (error: unknown) {
     const typedError = error as Error;
     sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
+      statusCode: StatusCodes.BAD_REQUEST,
       success: false,
       message: "Validation error",
       error: {

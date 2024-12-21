@@ -19,6 +19,7 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const config_1 = __importDefault(require("../../config"));
 const auth_1 = require("../../utils/auth");
 const createUserIntoDB = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+    // userData.role= 'admin';
     const result = yield user_model_1.default.create(userData);
     return result;
 });

@@ -37,7 +37,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
     }
 
     console.log(user.role)
-    if (requiredRoles && requiredRoles.includes(role)) {
+    if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError(
         StatusCodes.UNAUTHORIZED,
         "You are not authorized  hi!"
