@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const http_status_1 = __importDefault(require("http-status"));
 const blog_service_1 = require("./blog.service");
 const user_model_1 = __importDefault(require("../user/user.model"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
@@ -36,7 +35,7 @@ const createBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         const author = user === null || user === void 0 ? void 0 : user._id.toString();
         const result = yield blog_service_1.BlogServices.createBlogIntoDB({ title, content, author });
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.CREATED,
+            statusCode: http_status_codes_1.StatusCodes.CREATED,
             success: true,
             message: "Blog created successfully",
             data: result,
@@ -45,7 +44,7 @@ const createBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     catch (error) {
         const typedError = error;
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
             success: false,
             message: "Validation error",
             error: {
@@ -57,9 +56,9 @@ const createBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 }));
 const getAllBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield blog_service_1.BlogServices.getAllBlogFromDB();
+        const result = yield blog_service_1.BlogServices.getAllBlogFromDB(req.query);
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.CREATED,
+            statusCode: http_status_codes_1.StatusCodes.CREATED,
             success: true,
             message: "Blogs fetched successfully",
             data: result,
@@ -68,7 +67,7 @@ const getAllBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     catch (error) {
         const typedError = error;
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
             success: false,
             message: "Validation error",
             error: {
@@ -85,7 +84,7 @@ const updateBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         const updateData = req.body;
         const result = yield blog_service_1.BlogServices.updateBlogInDB(id, updateData);
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.CREATED,
+            statusCode: http_status_codes_1.StatusCodes.CREATED,
             success: true,
             message: "Blog update successfully",
             data: result,
@@ -94,7 +93,7 @@ const updateBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     catch (error) {
         const typedError = error;
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
             success: false,
             message: "Validation error",
             error: {
@@ -109,7 +108,7 @@ const deleteBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         const id = req.params.id;
         const result = yield blog_service_1.BlogServices.deleteBlogFromDB(id);
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.CREATED,
+            statusCode: http_status_codes_1.StatusCodes.CREATED,
             success: true,
             message: "Blog created successfully",
             data: result,
@@ -118,7 +117,7 @@ const deleteBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     catch (error) {
         const typedError = error;
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
             success: false,
             message: "Validation error",
             error: {

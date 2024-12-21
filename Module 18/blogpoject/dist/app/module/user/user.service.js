@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
 const user_model_1 = __importDefault(require("./user.model"));
-const http_status_1 = __importDefault(require("http-status"));
+const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const config_1 = __importDefault(require("../../config"));
 const auth_1 = require("../../utils/auth");
@@ -26,17 +26,19 @@ const createUserIntoDB = (userData) => __awaiter(void 0, void 0, void 0, functio
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.default.findOne({ email: payload.email });
     if (!user) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "This user is not found !");
     }
     const isBlocked = user === null || user === void 0 ? void 0 : user.isBlocked;
     if (isBlocked) {
-        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'This user is isBlocked !');
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "This user is isBlocked !");
     }
     console.log(user_model_1.default.isPasswordMatched);
     if (!(yield user_model_1.default.isPasswordMatched(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password)))
-        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'Password do not matched');
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Password do not matched");
     const jwtPayload = {
-        email: user.email, password: user.password
+        id: user === null || user === void 0 ? void 0 : user.id,
+        email: user === null || user === void 0 ? void 0 : user.email,
+        role: user === null || user === void 0 ? void 0 : user.role,
     };
     const accessToken = (0, auth_1.createToken)(jwtPayload, config_1.default.JWT_SECRET_KEY, config_1.default.jwt_access_expires_in);
     const refreshToken = (0, auth_1.createToken)(jwtPayload, config_1.default.jwt_refresh_secret, config_1.default.jwt_refresh_expires_in);
@@ -47,5 +49,5 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.UserServices = {
     createUserIntoDB,
-    loginUser
+    loginUser,
 };

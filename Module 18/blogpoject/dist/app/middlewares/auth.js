@@ -42,7 +42,7 @@ const auth = (...requiredRoles) => {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "This user is Blocked !");
         }
         console.log(user.role);
-        if (requiredRoles && requiredRoles.includes(role)) {
+        if (requiredRoles && !requiredRoles.includes(role)) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "You are not authorized  hi!");
         }
         req.user = decoded;
