@@ -24,7 +24,6 @@ const createUserIntoDB = (userData) => __awaiter(void 0, void 0, void 0, functio
 });
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.default.findOne({ email: payload.email });
-    console.log('Stored Hashed Password:', user);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
     }
@@ -32,7 +31,6 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (isBlocked) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'This user is isBlocked !');
     }
-    console.log(payload.password);
     console.log(user_model_1.default.isPasswordMatched);
     if (!(yield user_model_1.default.isPasswordMatched(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password)))
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'Password do not matched');

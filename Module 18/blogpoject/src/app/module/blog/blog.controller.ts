@@ -2,21 +2,35 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { BlogServices } from "./blog.service";
+import { string } from "zod";
+import User from "../user/user.model";
+import AppError from "../../errors/AppError";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import config from "../../config";
+import { StatusCodes } from "http-status-codes";
 
 const createBlog = catchAsync(async (req, res) => {
   try {
     const { title, content } = req.body;
-    console.log("this is user",req.user);
-    const result = await BlogServices.createBlogIntoDB({
-      title,
-      content,
-    });
-    const populatedBlog = await result.populate("author", "name email _id");
+    const token = req.headers.authorization;
+    // checking if the token is missing
+    if (!token) {
+      throw new AppError(StatusCodes.UNAUTHORIZED, "You are not authorized!");
+    }
+
+    const decoded = jwt.verify(
+      token,
+      config.jwt_access_secret as string
+    ) as JwtPayload;
+    const {  email} = decoded;
+    const user = await User.findOne({ email });
+    const author = user?._id.toString() as string;
+    const result = await BlogServices.createBlogIntoDB({ title, content,author });
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
       message: "Blog created successfully",
-      data: populatedBlog,
+      data: result,
     });
   } catch (error: unknown) {
     const typedError = error as Error;

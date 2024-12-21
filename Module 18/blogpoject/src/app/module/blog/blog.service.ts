@@ -2,25 +2,35 @@ import { ObjectId } from "mongoose";
 import { IUser } from "../user/user.interface";
 import { IBlog } from "./blog.interface";
 import { Blog } from "./blog.model";
+import QueryBuilder from "../../builder/querybuilder";
 
-// const createBlogIntoDB = async (title:string, content:string, author: ObjectId) => {
-//   const result = await Blog.create({
-//     title,
-//     content,
-//     author,
-//   });
-//   return result;
-// };
+interface CreateBlogInput {
+  title: string;
+  content: string;
+  author: string;
+  // author: ObjectId;
+}
 
-export const createBlogIntoDB = async (data: Partial<IBlog>) => {
-  const result = await Blog.create(data);
+export const createBlogIntoDB = async (data: CreateBlogInput) => {
+  const newBlog = await Blog.create(data);
+  return newBlog;
+};
+
+const getAllBlogFromDB = async (query: Record<string, unknown>) => {
+  const blogQuery = new QueryBuilder(
+    Blog.find(),
+    query
+  )
+    .search(['title', 'content'])  
+    .filter()
+    .sort()
+    .paginate()
+    .select();
+
+  const result = await blogQuery.modelQuery;
   return result;
 };
 
-const getAllBlogFromDB = async () => {
-  const result = await Blog.find();
-  return result;
-};
 const deleteBlogFromDB = async (id: string) => {
   const result = await Blog.findByIdAndDelete(id);
   return result;

@@ -1,7 +1,7 @@
 import { UserServices } from "./user.service";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import httpStatus from "http-status";
+import { StatusCodes } from "http-status-codes"
 import config from "../../config";
 
 const createUser = catchAsync(async (req, res) => {
@@ -11,7 +11,7 @@ const createUser = catchAsync(async (req, res) => {
     const result = await UserServices.createUserIntoDB(userData);
 
     sendResponse(res, {
-      statusCode: httpStatus.CREATED,
+      statusCode: StatusCodes.CREATED,
       success: true,
       message: "User registered successfully",
       data: result,
@@ -19,7 +19,7 @@ const createUser = catchAsync(async (req, res) => {
   } catch (error: unknown) {
     const typedError = error as Error;
     sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
+      statusCode: StatusCodes.BAD_REQUEST,
       success: false,
       message: "Validation error",
       error: {
@@ -41,7 +41,7 @@ const loginUser = catchAsync(async (req, res) => {
   });
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: StatusCodes.OK,
     success: true,
     message: 'User is logged in succesfully!',
     data: {
@@ -51,7 +51,7 @@ const loginUser = catchAsync(async (req, res) => {
   }catch (error: unknown) {
     const typedError = error as Error;
     sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
+      statusCode: StatusCodes.BAD_REQUEST,
       success: false,
       message: "Invalid credentials",
       error: {

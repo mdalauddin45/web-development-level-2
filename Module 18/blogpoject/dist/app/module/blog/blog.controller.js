@@ -12,40 +12,67 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BlogControllers = void 0;
+exports.BlogControllers = exports.createBlog = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const blog_service_1 = require("./blog.service");
-const createBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// const createBlog = catchAsync(async (req, res) => {
+//   try {
+//     const { title, content } = req.body;
+//     const result = await BlogServices.createBlogIntoDB({
+//       title,
+//       content,
+//     });
+//     const populatedBlog = await result.populate("author", "name email _id");
+//     sendResponse(res, {
+//       statusCode: httpStatus.CREATED,
+//       success: true,
+//       message: "Blog created successfully",
+//       data: populatedBlog,
+//     });
+//   } catch (error: unknown) {
+//     const typedError = error as Error;
+//     sendResponse(res, {
+//       statusCode: httpStatus.BAD_REQUEST,
+//       success: false,
+//       message: "Validation error",
+//       error: {
+//         details: typedError.message || "Invalid blog data",
+//         stack:
+//           process.env.NODE_ENV !== "production" ? typedError.stack : undefined,
+//       },
+//     });
+//   }
+// });
+const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id; // Retrieve user ID from the authenticated request
         const { title, content } = req.body;
-        console.log("this is user", req.user);
-        const result = yield blog_service_1.BlogServices.createBlogIntoDB({
-            title,
-            content,
-        });
-        const populatedBlog = yield result.populate("author", "name email _id");
+        console.log(title, content, userId);
+        const newBlog = yield blog_service_1.BlogServices.createBlogIntoDB({ title, content, author: userId });
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.CREATED,
+            statusCode: 201,
             success: true,
             message: "Blog created successfully",
-            data: populatedBlog,
+            data: newBlog,
         });
     }
     catch (error) {
         const typedError = error;
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
+            statusCode: 400,
             success: false,
-            message: "Validation error",
+            message: "Failed to create blog",
             error: {
-                details: typedError.message || "Invalid blog data",
+                details: typedError.message,
                 stack: process.env.NODE_ENV !== "production" ? typedError.stack : undefined,
             },
         });
     }
-}));
+});
+exports.createBlog = createBlog;
 const getAllBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield blog_service_1.BlogServices.getAllBlogFromDB();
@@ -120,7 +147,7 @@ const deleteBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     }
 }));
 exports.BlogControllers = {
-    createBlog,
+    createBlog: exports.createBlog,
     deleteBlog,
     updateBlog,
     getAllBlog,

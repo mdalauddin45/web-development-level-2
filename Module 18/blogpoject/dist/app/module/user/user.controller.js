@@ -16,14 +16,14 @@ exports.UserControllers = void 0;
 const user_service_1 = require("./user.service");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const http_status_1 = __importDefault(require("http-status"));
+const http_status_codes_1 = require("http-status-codes");
 const config_1 = __importDefault(require("../../config"));
 const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = req.body;
         const result = yield user_service_1.UserServices.createUserIntoDB(userData);
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.CREATED,
+            statusCode: http_status_codes_1.StatusCodes.CREATED,
             success: true,
             message: "User registered successfully",
             data: result,
@@ -32,7 +32,7 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     catch (error) {
         const typedError = error;
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
             success: false,
             message: "Validation error",
             error: {
@@ -51,7 +51,7 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
             httpOnly: true,
         });
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.OK,
+            statusCode: http_status_codes_1.StatusCodes.OK,
             success: true,
             message: 'User is logged in succesfully!',
             data: {
@@ -62,7 +62,7 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     catch (error) {
         const typedError = error;
         (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
             success: false,
             message: "Invalid credentials",
             error: {

@@ -11,19 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogServices = exports.createBlogIntoDB = void 0;
 const blog_model_1 = require("./blog.model");
-// const createBlogIntoDB = async (title:string, content:string, author: ObjectId) => {
-//   const result = await Blog.create({
-//     title,
-//     content,
-//     author,
-//   });
-//   return result;
-// };
 const createBlogIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield blog_model_1.Blog.create(data);
-    return result;
+    const newBlog = yield blog_model_1.Blog.create(data);
+    return newBlog;
 });
 exports.createBlogIntoDB = createBlogIntoDB;
+// export const createBlogIntoDB = async (data: Partial<IBlog>) => {
+//   const result = await Blog.create(data);
+//   return result;
+// };
 const getAllBlogFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield blog_model_1.Blog.find();
     return result;

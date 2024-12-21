@@ -3,17 +3,27 @@ import sendResponse from "../../utils/sendResponse";
 import httpStatus from 'http-status';
 import { AdminServices } from "./admin.service";
 import { BlogServices } from "../blog/blog.service";
+import User from "../user/user.model";
 
 const updateUser = catchAsync(async (req, res) => {
     try {
       const id = req.params.id;
+      const user = await User.findById(id);
+
+      if (!user) {
+        return sendResponse(res, {
+          statusCode: httpStatus.NOT_FOUND,
+          success: false,
+          message: "User not found",
+          error: { details: "The provided user ID does not exist." },
+        });
+      }
+  
       const result = await AdminServices.updateUserInDB(id, {isBlocked: true});
-        console.log(result);
       sendResponse(res, {
         statusCode: httpStatus.CREATED,
         success: true,
         message: "User blocked successfully",
-        data: result,
       });
     } catch (error: unknown) {
       const typedError = error as Error;
@@ -33,7 +43,16 @@ const updateUser = catchAsync(async (req, res) => {
   const deleteBlog = catchAsync(async (req, res) => {
     try {
       const id = req.params.id;
-      console.log(id);
+      const blog = await User.findById(id);
+
+      if (!blog) {
+        return sendResponse(res, {
+          statusCode: httpStatus.NOT_FOUND,
+          success: false,
+          message: "Blog not found",
+          error: { details: "The provided blog ID does not exist." },
+        });
+      }
       const result = await BlogServices.deleteBlogFromDB(id);
       sendResponse(res, {
         statusCode: httpStatus.CREATED,

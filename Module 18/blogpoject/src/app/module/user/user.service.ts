@@ -6,6 +6,7 @@ import config from "../../config";
 import { createToken } from "../../utils/auth";
 
 const createUserIntoDB = async (userData: IUser) => {
+  // userData.role= 'admin';
   const result = await User.create(userData);
   return result;
 };
