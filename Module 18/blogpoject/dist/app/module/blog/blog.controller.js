@@ -21,6 +21,7 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../../config"));
 const http_status_codes_1 = require("http-status-codes");
+const blog_model_1 = require("./blog.model");
 const createBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, content } = req.body;
@@ -56,7 +57,7 @@ const createBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 }));
 const getAllBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield blog_service_1.BlogServices.getAllBlogFromDB(req.query);
+        const result = yield blog_service_1.BlogServices.getAllBlogFromDB(req === null || req === void 0 ? void 0 : req.query);
         (0, sendResponse_1.default)(res, {
             statusCode: http_status_codes_1.StatusCodes.CREATED,
             success: true,
@@ -105,12 +106,19 @@ const updateBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 const deleteBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
+        const existingBlog = yield blog_model_1.Blog.findById(id);
+        if (!existingBlog) {
+            return (0, sendResponse_1.default)(res, {
+                statusCode: http_status_codes_1.StatusCodes.NOT_FOUND,
+                success: false,
+                message: "Blog not found",
+            });
+        }
         const result = yield blog_service_1.BlogServices.deleteBlogFromDB(id);
         (0, sendResponse_1.default)(res, {
             statusCode: http_status_codes_1.StatusCodes.CREATED,
             success: true,
-            message: "Blog created successfully",
-            data: result,
+            message: "Blog deleted successfully",
         });
     }
     catch (error) {
