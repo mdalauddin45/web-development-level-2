@@ -6,7 +6,7 @@ import config from "../../config";
 import { createToken } from "../../utils/auth";
 
 const createUserIntoDB = async (userData: IUser) => {
-  // userData.role= 'admin';
+  userData.role= 'admin';
   const result = await User.create(userData);
   return result;
 };
@@ -20,7 +20,6 @@ const loginUser = async (payload: ILoginUser) => {
   if (isBlocked) {
     throw new AppError(StatusCodes.FORBIDDEN, "This user is isBlocked !");
   }
-  console.log(User.isPasswordMatched);
   if (!(await User.isPasswordMatched(payload?.password, user?.password)))
     throw new AppError(StatusCodes.FORBIDDEN, "Password do not matched");
 

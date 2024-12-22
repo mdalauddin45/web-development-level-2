@@ -80,7 +80,6 @@ const getAllBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 const updateBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
-        console.log("given id: " + id);
         const updateData = req.body;
         const result = yield blog_service_1.BlogServices.updateBlogInDB(id, updateData);
         (0, sendResponse_1.default)(res, {

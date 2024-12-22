@@ -32,7 +32,6 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (isBlocked) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "This user is isBlocked !");
     }
-    console.log(user_model_1.default.isPasswordMatched);
     if (!(yield user_model_1.default.isPasswordMatched(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password)))
         throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Password do not matched");
     const jwtPayload = {

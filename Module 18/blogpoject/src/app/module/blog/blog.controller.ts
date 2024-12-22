@@ -7,6 +7,7 @@ import AppError from "../../errors/AppError";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import { StatusCodes } from "http-status-codes";
+import { Blog } from "./blog.model";
 
 const createBlog = catchAsync(async (req, res) => {
   try {
@@ -48,7 +49,7 @@ const createBlog = catchAsync(async (req, res) => {
 
 const getAllBlog = catchAsync(async (req, res) => {
   try {
-    const result = await BlogServices.getAllBlogFromDB(req.query);
+    const result = await BlogServices.getAllBlogFromDB(req?.query);
     sendResponse(res, {
       statusCode: StatusCodes.CREATED,
       success: true,
@@ -73,7 +74,6 @@ const getAllBlog = catchAsync(async (req, res) => {
 const updateBlog = catchAsync(async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("given id: " + id);
     const updateData = req.body;
 
     const result = await BlogServices.updateBlogInDB(id, updateData);
@@ -102,12 +102,20 @@ const updateBlog = catchAsync(async (req, res) => {
 const deleteBlog = catchAsync(async (req, res) => {
   try {
     const id = req.params.id;
+    const existingBlog = await Blog.findById(id); 
+    if (!existingBlog) {
+      return sendResponse(res, {
+        statusCode: StatusCodes.NOT_FOUND,
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
     const result = await BlogServices.deleteBlogFromDB(id);
     sendResponse(res, {
       statusCode: StatusCodes.CREATED,
       success: true,
-      message: "Blog created successfully",
-      data: result,
+      message: "Blog deleted successfully",
     });
   } catch (error: unknown) {
     const typedError = error as Error;
