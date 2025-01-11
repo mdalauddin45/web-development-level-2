@@ -5,6 +5,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
+import { Outlet } from "react-router-dom";
 const { Header, Content, Footer, Sider } = Layout;
 const items = [
   UserOutlined,
@@ -47,9 +48,8 @@ export const MainLayout = () => {
                 minHeight: 360,
               }}
             >
-              content
+             <Outlet/>
             </div>
-            <h1>Main content shuld go here</h1>
           </Content>
           <Footer style={{ textAlign: "center" }}>
             Ant Design ©{new Date().getFullYear()} Created by Ant UED
